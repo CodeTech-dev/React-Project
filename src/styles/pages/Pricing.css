@@ -1,0 +1,203 @@
+/* PricingPage.css */
+.pricing-container {
+    margin-top: 20px;
+}
+
+.pricing-container h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  background: linear-gradient(90deg, #2c3e50 0%, #007bff 100%);
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-bottom: 3rem;
+}
+
+.plans-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: 2rem 1rem;
+}
+
+.plan-category h2 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: #3498db;
+  text-align: center;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.plan-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem; /* Reduced padding for a more compact look */
+  position: relative;
+  transition: transform 0.3s ease;
+  border: 2px solid #ecf0f1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.plan-card.popular {
+  border-color: #3498db;
+  box-shadow: 0 10px 25px rgba(52, 152, 219, 0.2);
+}
+
+.popular-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: #3498db;
+  color: white;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.plan-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem; /* Reduced margin for a tighter layout */
+  color: #2c3e50;
+}
+
+.price {
+  margin-bottom: 1rem; /* Reduced margin for a tighter layout */
+  display: flex;
+  align-items: baseline;
+}
+
+.amount {
+  font-size: 2rem; /* Slightly reduced font size for price */
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.period {
+  color: #7f8c8d;
+  margin-left: 0.5rem;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem; /* Reduced margin for a tighter layout */
+  flex-grow: 1;
+}
+
+.features li {
+  padding: 0.5rem 0; /* Reduced padding for a more compact look */
+  border-bottom: 1px solid #ecf0f1;
+  color: #34495e;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.features li:last-child {
+  border-bottom: none;
+}
+
+.checkmark {
+  color: #2ecc71;
+  font-size: 1rem;
+  min-width: 1rem;
+  margin-top: 0.25rem;
+}
+
+.feature-text {
+  flex: 1;
+}
+
+.select-btn {
+  width: 100%;
+  padding: 0.8rem; /* Reduced padding for a more compact button */
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: auto;
+}
+
+.select-btn:hover {
+  background: #2980b9;
+}
+
+.business .select-btn {
+  background: #2c3e50;
+}
+
+.business .select-btn:hover {
+  background: #1a252f;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pricing-container {
+    padding: 1rem;
+  }
+
+  .pricing-container h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .plan-category h2 {
+    font-size: 1.5rem;
+  }
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .plan-card {
+    padding: 1.25rem; /* Adjusted padding for mobile */
+  }
+
+  .amount {
+    font-size: 1.8rem; /* Reduced font size for mobile */
+  }
+}
+
+@media (min-width: 1024px) {
+  .plans-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .plan-category:first-child .plans-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .plan-category:last-child .plans-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
