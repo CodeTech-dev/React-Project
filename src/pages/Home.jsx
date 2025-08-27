@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import React from "react";
 import "../styles/pages/Home.css"
-import CustomerCare1 from "../../src/assets/hero-image-2.png"
+import CustomerCare1 from "../../src/assets/hero-image-2-removebg.png"
 import HowItWorks from "../components/Steps";
 import Testimonials from "../components/TestimonialCard";
 

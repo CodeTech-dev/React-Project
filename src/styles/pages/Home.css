@@ -27,7 +27,7 @@
 
 .hero-content p {
     font-size: 1.5rem;
-    color: #525f7f;
+    color: #1a202c;
     margin-bottom: 20px;
 }
 
@@ -37,7 +37,7 @@
     background-color: #ff9f43;
     color: #fff;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 20px;
     border-radius: 50px;
     transition: background-color 0.3s ease;
 }
@@ -47,16 +47,13 @@
 }
 
 .hero-image {
-    width: 50%;
+  width: 50%;
 }
 
 .hero-image img {
-    width: 100%;
-    height: auto;
-    background: none;
-    border: none;
-    /* mask-image: radial-gradient(circle, black 70%, transparent 100%); */
-    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); */
+  width: 100%;
+  height: auto;
+  border: none;
 }
 
 /* RESPONSIVE LAYOUT */

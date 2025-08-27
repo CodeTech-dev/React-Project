@@ -5,7 +5,7 @@ const HowItWorks = () => {
   return (
     <section className="how-it-works-section">
       <h2>How It Works</h2>
-      <p className="subtitle">For personal or small business use</p>
+      <p className="steps-subtitle">For personal or small business use</p>
 
       <div className="steps-container">
         <div className="step-card">

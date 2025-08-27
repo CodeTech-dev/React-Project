@@ -2,10 +2,7 @@
 
 .testimonials-section{
   margin-top: 30px;
-  margin-bottom: 30px; 
-
-
-  
+  margin-bottom: 30px;   
 }
 
 
@@ -13,6 +10,9 @@
   text-align: center;
 }
 
+/* .testimonial-section p{
+  color: #222;
+} */
 
 .testimonials-container {
   max-width: 1200px;

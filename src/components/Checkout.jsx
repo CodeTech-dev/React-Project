@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import '../styles/components/Checkout.css';
-
 import { useLocation } from 'react-router-dom';
 
 const CheckoutPage = () => {
   const location = useLocation();
-  const { selectedPlan } = location.state || {}; // Get plan data from navigation
+  const { selectedPlan } = location.state || {};
 
   // Default plan if none selected (fallback)
   const defaultPlan = {
@@ -24,55 +23,70 @@ const CheckoutPage = () => {
   // Use passed plan or default
   const planToDisplay = selectedPlan || defaultPlan;
 
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedPayment, setSelectedPayment] = useState('credit');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [formData, setFormData] = useState({
-    // Personal Information
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    
-    // Account Information
-    createAccount: false,
-    password: '',
-    confirmPassword: '',
-    
-    // Billing Information
     billingAddress: '',
     billingCity: '',
-    billingState: '',
     billingZip: '',
-    billingCountry: '',
-    
-    // Shipping Information
-    sameAsBilling: true,
-    shippingAddress: '',
-    shippingCity: '',
-    shippingState: '',
-    shippingZip: '',
-    shippingCountry: '',
-    
-    // Payment Information
     cardNumber: '',
     cardName: '',
     expiryDate: '',
-    cvv: '',
-    
-    // Coupon
-    couponCode: '',
+    cvv: ''
   });
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     });
+  };
+
+  const handlePaymentSelect = (paymentMethod) => {
+    setSelectedPayment(paymentMethod);
+  };
+
+  const handleNextStep = () => {
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    // Add your submission logic here
+    setIsSubmitted(true);
+    
+    setTimeout(() => {
+      setIsSubmitted(false);
+      setCurrentStep(1);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        billingAddress: '',
+        billingCity: '',
+        billingZip: '',
+        cardNumber: '',
+        cardName: '',
+        expiryDate: '',
+        cvv: ''
+      });
+    }, 3000);
   };
 
   const subtotal = planToDisplay.price;
@@ -84,71 +98,51 @@ const CheckoutPage = () => {
       <div className="checkout-content">
         <h1>Checkout</h1>
         
-        <form onSubmit={handleSubmit} className="checkout-form">
-          {/* Plan Options Section */}
-          <div className="checkout-section">
-            <h2>Selected Plan</h2>
-            <div className="plan-summary">
-              <div className="plan-card">
-                <h3>{planToDisplay.name}</h3>
-                <div className="plan-price">
-                  <span className="amount">₦{planToDisplay.price.toLocaleString('en-NG')}</span>
-                  <span className="period">/{planToDisplay.period}</span>
-                </div>
-                <ul className="features">
-                  {planToDisplay.features.map((feature, idx) => (
-                    <li key={idx}>
-                      <i className="fas fa-check checkmark"></i>
-                      <span className="feature-text">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+        {/* Progress Bar */}
+        <div className="progress-bar">
+          <div className="step" onClick={() => setCurrentStep(1)}>
+            <div className={`step-circle ${currentStep >= 1 ? 'active' : ''}`}>
+              {currentStep > 1 ? <i className="fas fa-check"></i> : '1'}
             </div>
+            <span className={currentStep >= 1 ? 'active' : ''}>Delivery</span>
           </div>
-
-          {/* Rest of the form remains the same */}
-          {/* Cart Information */}
-          <div className="checkout-section">
-            <h2>Order Summary</h2>
-            <div className="cart-info">
-              <div className="cart-item">
-                <span>{planToDisplay.name}</span>
-                <span>₦{planToDisplay.price.toLocaleString('en-NG')}</span>
-              </div>
-              <div className="cart-item">
-                <span>Tax (8%)</span>
-                <span>₦{tax}</span>
-              </div>
-              <div className="cart-total">
-                <strong>Total</strong>
-                <strong>₦{total}</strong>
-              </div>
+          
+          <div className="step-line"></div>
+          
+          <div className="step" onClick={() => currentStep > 1 && setCurrentStep(2)}>
+            <div className={`step-circle ${currentStep >= 2 ? 'active' : ''}`}>
+              {currentStep > 2 ? <i className="fas fa-check"></i> : '2'}
             </div>
+            <span className={currentStep >= 2 ? 'active' : ''}>Confirmation</span>
           </div>
-
-          {/* Coupon Section */}
-          <div className="checkout-section">
-            <h2>Apply Coupon</h2>
-            <div className="coupon-section">
-              <input
-                type="text"
-                name="couponCode"
-                placeholder="Enter coupon code"
-                value={formData.couponCode}
-                onChange={handleInputChange}
-                className="coupon-input"
-              />
-              <button type="button" className="coupon-button">Apply</button>
+          
+          <div className="step-line"></div>
+          
+          <div className="step" onClick={() => currentStep > 2 && setCurrentStep(3)}>
+            <div className={`step-circle ${currentStep >= 3 ? 'active' : ''}`}>
+              {currentStep > 3 ? <i className="fas fa-check"></i> : '3'}
             </div>
+            <span className={currentStep >= 3 ? 'active' : ''}>Payment</span>
           </div>
+          
+          <div className="step-line"></div>
+          
+          <div className="step" onClick={() => currentStep > 3 && setCurrentStep(4)}>
+            <div className={`step-circle ${currentStep >= 4 ? 'active' : ''}`}>
+              {currentStep > 4 ? <i className="fas fa-check"></i> : '4'}
+            </div>
+            <span className={currentStep >= 4 ? 'active' : ''}>Finish</span>
+          </div>
+        </div>
 
-          {/* Personal Information */}
-          <div className="checkout-section">
-            <h2>Personal Information</h2>
-            <div className="form-row">
+        {/* Step Content */}
+        <div className="step-content">
+          {currentStep === 1 && (
+            <div className="step-section">
+              <h2>Delivery Information</h2>
+              
               <div className="form-group">
-                <label htmlFor="firstName">First Name *</label>
+                <label htmlFor="firstName">Full Name *</label>
                 <input
                   type="text"
                   id="firstName"
@@ -158,297 +152,224 @@ const CheckoutPage = () => {
                   onChange={handleInputChange}
                 />
               </div>
+              
               <div className="form-group">
-                <label htmlFor="lastName">Last Name *</label>
+                <label htmlFor="email">Email *</label>
                 <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
+                  type="email"
+                  id="email"
+                  name="email"
                   required
-                  value={formData.lastName}
+                  value={formData.email}
                   onChange={handleInputChange}
                 />
               </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email Address *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                value={formData.email}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="phone">Phone Number</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-
-          {/* Account Information */}
-          <div className="checkout-section">
-            <h2>Account Information</h2>
-            <div className="form-group">
-              <label className="checkbox-label">
+              
+              <div className="form-group">
+                <label htmlFor="phone">Phone *</label>
                 <input
-                  type="checkbox"
-                  name="createAccount"
-                  checked={formData.createAccount}
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
+                  value={formData.phone}
                   onChange={handleInputChange}
                 />
-                Create an account
-              </label>
-            </div>
-            {formData.createAccount && (
-              <>
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="billingAddress">Address *</label>
+                <input
+                  type="text"
+                  id="billingAddress"
+                  name="billingAddress"
+                  required
+                  value={formData.billingAddress}
+                  onChange={handleInputChange}
+                />
+              </div>
+              
+              <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="password">Password *</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    required={formData.createAccount}
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="confirmPassword">Confirm Password *</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    required={formData.createAccount}
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Billing Information */}
-          <div className="checkout-section">
-            <h2>Billing Information</h2>
-            <div className="form-group">
-              <label htmlFor="billingAddress">Address *</label>
-              <input
-                type="text"
-                id="billingAddress"
-                name="billingAddress"
-                required
-                value={formData.billingAddress}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="billingCity">City *</label>
-                <input
-                  type="text"
-                  id="billingCity"
-                  name="billingCity"
-                  required
-                  value={formData.billingCity}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="billingState">State *</label>
-                <input
-                  type="text"
-                  id="billingState"
-                  name="billingState"
-                  required
-                  value={formData.billingState}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="billingZip">ZIP Code *</label>
-                <input
-                  type="text"
-                  id="billingZip"
-                  name="billingZip"
-                  required
-                  value={formData.billingZip}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="billingCountry">Country *</label>
-                <select
-                  id="billingCountry"
-                  name="billingCountry"
-                  required
-                  value={formData.billingCountry}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select Country</option>
-                  <option value="US">United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="UK">United Kingdom</option>
-                  <option value="AU">Australia</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Shipping Information */}
-          <div className="checkout-section">
-            <h2>Shipping Information</h2>
-            <div className="form-group">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="sameAsBilling"
-                  checked={formData.sameAsBilling}
-                  onChange={handleInputChange}
-                />
-                Same as billing address
-              </label>
-            </div>
-            {!formData.sameAsBilling && (
-              <>
-                <div className="form-group">
-                  <label htmlFor="shippingAddress">Address *</label>
+                  <label htmlFor="billingCity">City *</label>
                   <input
                     type="text"
-                    id="shippingAddress"
-                    name="shippingAddress"
+                    id="billingCity"
+                    name="billingCity"
                     required
-                    value={formData.shippingAddress}
+                    value={formData.billingCity}
                     onChange={handleInputChange}
                   />
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="shippingCity">City *</label>
-                    <input
-                      type="text"
-                      id="shippingCity"
-                      name="shippingCity"
-                      required
-                      value={formData.shippingCity}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="shippingState">State *</label>
-                    <input
-                      type="text"
-                      id="shippingState"
-                      name="shippingState"
-                      required
-                      value={formData.shippingState}
-                      onChange={handleInputChange}
-                    />
-                  </div>
+                
+                <div className="form-group">
+                  <label htmlFor="billingZip">ZIP Code *</label>
+                  <input
+                    type="text"
+                    id="billingZip"
+                    name="billingZip"
+                    required
+                    value={formData.billingZip}
+                    onChange={handleInputChange}
+                  />
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="shippingZip">ZIP Code *</label>
-                    <input
-                      type="text"
-                      id="shippingZip"
-                      name="shippingZip"
-                      required
-                      value={formData.shippingZip}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="shippingCountry">Country *</label>
-                    <select
-                      id="shippingCountry"
-                      name="shippingCountry"
-                      required
-                      value={formData.shippingCountry}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Select Country</option>
-                      <option value="US">United States</option>
-                      <option value="CA">Canada</option>
-                      <option value="UK">United Kingdom</option>
-                      <option value="AU">Australia</option>
-                    </select>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Payment Information */}
-          <div className="checkout-section">
-            <h2>Payment Information</h2>
-            <div className="form-group">
-              <label htmlFor="cardNumber">Card Number *</label>
-              <input
-                type="text"
-                id="cardNumber"
-                name="cardNumber"
-                placeholder="1234 5678 9012 3456"
-                required
-                value={formData.cardNumber}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="cardName">Name on Card *</label>
-              <input
-                type="text"
-                id="cardName"
-                name="cardName"
-                required
-                value={formData.cardName}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="expiryDate">Expiry Date *</label>
-                <input
-                  type="text"
-                  id="expiryDate"
-                  name="expiryDate"
-                  placeholder="MM/YY"
-                  required
-                  value={formData.expiryDate}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="cvv">CVV *</label>
-                <input
-                  type="text"
-                  id="cvv"
-                  name="cvv"
-                  placeholder="123"
-                  required
-                  value={formData.cvv}
-                  onChange={handleInputChange}
-                />
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Submit Button */}
-          <div className="checkout-section">
-            <button type="submit" className="submit-button">
-              Complete Purchase - ₦{total}
+          {currentStep === 2 && (
+            <div className="step-section">
+              <h2>Order Summary</h2>
+              
+              <div className="order-summary">
+                <div className="summary-item">
+                  <span>{planToDisplay.name}</span>
+                  <span>₦{planToDisplay.price.toLocaleString('en-NG')}</span>
+                </div>
+                <div className="summary-item">
+                  <span>Tax (8%)</span>
+                  <span>₦{tax}</span>
+                </div>
+                <div className="summary-item total">
+                  <strong>Total:</strong>
+                  <strong>₦{total}</strong>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 3 && (
+            <div className="step-section">
+              <h2>Payment Method</h2>
+              
+              <div className="payment-options">
+                <div className="payment-option">
+                  <input
+                    type="radio"
+                    id="creditCard"
+                    name="paymentMethod"
+                    checked={selectedPayment === 'credit'}
+                    onChange={() => handlePaymentSelect('credit')}
+                  />
+                  <label htmlFor="creditCard">
+                    <div className="card-logos">
+                      <i className="fab fa-cc-visa"></i>
+                      <i className="fab fa-cc-mastercard"></i>
+                    </div>
+                    <div className="payment-details">
+                      <span>Pay with credit card</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              
+              {selectedPayment === 'credit' && (
+                <div className="credit-card-form">
+                  <div className="form-group">
+                    <label htmlFor="cardName">Name on Card *</label>
+                    <input
+                      type="text"
+                      id="cardName"
+                      name="cardName"
+                      required
+                      value={formData.cardName}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="cardNumber">Card Number *</label>
+                    <input
+                      type="text"
+                      id="cardNumber"
+                      name="cardNumber"
+                      required
+                      value={formData.cardNumber}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="expiryDate">Expiry Date *</label>
+                      <input
+                        type="text"
+                        id="expiryDate"
+                        name="expiryDate"
+                        required
+                        value={formData.expiryDate}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    
+                    <div className="form-group">
+                      <label htmlFor="cvv">CVV *</label>
+                      <input
+                        type="text"
+                        id="cvv"
+                        name="cvv"
+                        required
+                        value={formData.cvv}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div className="step-section">
+              {isSubmitted ? (
+                <div className="success-message">
+                  <i className="fas fa-check-circle"></i>
+                  <h2>Order Complete!</h2>
+                  <p>Thank you for your purchase.</p>
+                </div>
+              ) : (
+                <>
+                  <h2>Complete Purchase</h2>
+                  <p>Review your order and complete the payment</p>
+                  
+                  <div className="final-summary">
+                    <div className="summary-item">
+                      <span>Total Amount:</span>
+                      <span className="amount">₦{total}</span>
+                    </div>
+                  </div>
+                  
+                  <form onSubmit={handleSubmit}>
+                    <button type="submit" className="submit-button">
+                      Pay Now - ₦{total}
+                    </button>
+                  </form>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="step-navigation">
+          {currentStep > 1 && (
+            <button 
+              className="back-button"
+              onClick={handlePrevStep}
+            >
+              Back
             </button>
-          </div>
-        </form>
+          )}
+          
+          {currentStep < 4 && (
+            <button 
+              className="next-button"
+              onClick={handleNextStep}
+            >
+              Next Step
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

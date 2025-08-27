@@ -23,7 +23,7 @@ const Services = () => {
         <section className="service-plan home-plan">
           <div className="content">
             <i className="fas fa-home icon"></i>
-            <h1>Personal Plan</h1>
+            <h1>Home Plan</h1>
             <p>Our Home Plan is designed to provide comprehensive solutions for your residential needs. Whether you're looking to enhance your digital life at home,improve security, or upgrade your home network, we've got you covered.</p>
             
             <p>This plan includes regular maintenance checks, priority support, and exclusive access to our network of trusted home service professionals. We understand that your home is your sanctuary, and we're committed to giving you the best digital experience.</p>
